@@ -13,8 +13,7 @@
           </span>
           </div>
           <div v-show="endPointList.length === 0" class="text-sm">
-            You need Cloudflare Workers to upload files to Cloudflare R2. Have a look at the
-            <a href="/setup-guide/" class="underline">setup guide</a>.
+            You need Cloudflare Workers to upload files to Cloudflare R2.
           </div>
           <div v-for="item in endPointList" class="flex mt-2">
             <input type="radio" name="current_endpoint" :id="item.endPoint" :data-id="item.endPoint" :checked="item.endPoint === endPoint"
@@ -48,9 +47,9 @@
           </div>
           <div>
             <label for="custom_domain" class="text-sm">Custom Domain (Optional)</label>
-            <input type="text" placeholder="no need for the https:// prefix" v-model="newCustomDomain"
-                   id="custom_domain"
-                   style="margin-bottom: .5rem" class="text-xs">
+            <select v-model="newCustomDomain" id="custom_domain" class="text-xs">
+              <option v-for="domain in customDomainList" :value="domain">{{ domain }}</option>
+            </select>
             <div class="opacity-70 text-xs leading-4 mb-8">
               Use your own domain name to access the files instead of <code
               class="text-black dark:text-white">&lt;bucket&gt;.&lt;user&gt;.workers.dev</code>.
@@ -64,9 +63,6 @@
           </div>
         </form>
       </article>
-      <article>
-        <sync-endpoints></sync-endpoints>
-      </article>
     </details>
 
   </div>
@@ -75,24 +71,27 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue'
 import {useStatusStore} from '../store/status'
-import SyncEndpoints from './syncEndpoints.vue'
 import { storeToRefs } from 'pinia'
 import {animateText} from '../utils/animateText.js'
 
 let statusStore = useStatusStore()
 let { endPointPulled } = storeToRefs(statusStore)
 
-let endPoint = ref('')
-let apiKey = ref('')
+let endPoint = ref(import.meta.env.VITE_APP_CF_WORKER_ENDPOINT || '')
+let apiKey = ref(import.meta.env.VITE_APP_CF_WORKER_API_KEY || '')
 let btnText = ref('Save To LocalStorage')
 let btnDisabled = ref(false)
 let endPointList = ref([])
 let panelOpen = ref('1')
-let customDomain = ref('')
+let customDomain = ref(import.meta.env.VITE_APP_R2_BUCKET_LIST)
 
-let newEndpoint = ref('')
-let newApiKey = ref('')
-let newCustomDomain = ref('')
+let newEndpoint = ref(endPoint)
+let newApiKey = ref(apiKey)
+let newCustomDomain = ref(customDomain)
+
+let customDomainList = ref(import.meta.env.VITE_APP_R2_BUCKET_LIST?.split(',') || []) // Add your custom domains here
+
+console.log(import.meta.env)
 
 let editingEndpoint = ref('')
 let endpointActionText = ref('Add a new endpoint')
@@ -152,8 +151,8 @@ const deleteThisEndPoint = function (endpoint) {
 }
 
 const restoreSavedApiInfo = function () {
-  endPoint.value = localStorage.getItem('endPoint') || ''
-  apiKey.value = localStorage.getItem('apiKey') || ''
+  endPoint.value = localStorage.getItem('endPoint') || import.meta.env.VITE_WORKER_ENDPOINT || ''
+  apiKey.value = localStorage.getItem('apiKey') || import.meta.env.VITE_WORKER_API_KEY || ''
   customDomain.value = localStorage.getItem('customDomain') || ''
 }
 
@@ -276,8 +275,9 @@ watch(endPointPulled, val => {
 })
 
 onMounted(() => {
-  restoreSavedApiInfo()
-  restoreEndPointList()
+  // restoreSavedApiInfo()
+  // restoreEndPointList()
+  saveApiInfo()
 
   document.getElementById('panel').addEventListener('toggle', function (e) {
     panelOpen.value = e.target.open ? '1' : '0'

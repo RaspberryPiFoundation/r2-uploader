@@ -543,9 +543,9 @@ let handleFilesChange = function (e) {
     // If uploadToFolder is checked and we have a custom folder name, prepend it to the file path
     if (uploadToFolder.value && customFolderName.value) {
       let folderPath = customFolderName.value
-      if (!folderPath.startsWith('/')) {
-        folderPath = '/' + folderPath
-      }
+      // if (!folderPath.startsWith('/')) {
+      //   folderPath = '/' + folderPath
+      // }
       if (!folderPath.endsWith('/')) {
         folderPath = folderPath + '/'
       }
@@ -560,9 +560,9 @@ let handleFilesChange = function (e) {
     // If we have a folder path, include it in the id_key as well
     if (uploadToFolder.value && customFolderName.value) {
       let folderPath = customFolderName.value
-      if (!folderPath.startsWith('/')) {
-        folderPath = '/' + folderPath
-      }
+      // if (!folderPath.startsWith('/')) {
+      //   folderPath = '/' + folderPath
+      // }
       if (!folderPath.endsWith('/')) {
         folderPath = folderPath + '/'
       }
@@ -1070,9 +1070,9 @@ watch(uploadToFolder, (newVal) => {
   } else if (customFolderName.value && customFolderName.value !== '/') {
     // When checked and there's a custom folder name, apply it
     let folderPath = customFolderName.value
-    if (!folderPath.startsWith('/')) {
-      folderPath = '/' + folderPath
-    }
+    // if (!folderPath.startsWith('/')) {
+    //   folderPath = '/' + folderPath
+    // }
     if (!folderPath.endsWith('/')) {
       folderPath = folderPath + '/'
     }
@@ -1106,9 +1106,9 @@ let handleFolderNameBlur = function () {
 
   // Normalize folder path to ensure it starts and ends with /
   let folderPath = customFolderName.value
-  if (!folderPath.startsWith('/')) {
-    folderPath = '/' + folderPath
-  }
+  // if (!folderPath.startsWith('/')) {
+  //   folderPath = '/' + folderPath
+  // }
   if (!folderPath.endsWith('/')) {
     folderPath = folderPath + '/'
   }

@@ -1,4 +1,8 @@
-<span style="font-size: .8rem">Last updated: 2024-07-11</span>
+## R2 Uploader
+
+This is a fork of an open source tool used to enable the uploading of assets to any R2 bucket given user inputs. This has been altered to default to a single bucket with required parameters obtained from environment variables (see [.env.example](.env.example)).
+
+Additional changes compared to the parent repository can be seen [here](https://github.com/jw-12138/r2-uploader/compare/main...RaspberryPiFoundation:r2-uploader:main).
 
 ### Why this tool? 🤔
 
